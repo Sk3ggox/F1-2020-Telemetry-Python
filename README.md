@@ -1,7 +1,7 @@
 # F1-2020-Telemetry-Python
 
 A package handler for telemetry data over UDP for the game F1 2020. 
-Currently only supports linux and must be ran on a seperate server.
+Currently only supports linux and works best when ran on a seperate server.
 
 For setup, firstly get a json auth key for your FireBase Realtime Database.
 Paste this in the project root directory (where main.py is located).
