@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <script src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="mystyle.css">
+    <title>Display</title>
+</head>
+<body>
+    <p id="WA"></p>
+    <canvas id="WheelAngle" width="380" height="150"></canvas>
+    <p id="SP"></p>
+    <canvas id="Speed" width="380" height="150"></canvas>
+    <script>
+        var optsWA = {
+            angle: -0.2, // The span of the gauge arc
+            lineWidth: 0.2, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.54, // // Relative to gauge radius
+                strokeWidth: 0.088, // The thickness
+                color: '#000000' // Fill color
+            },
+            limitMax: false, // If false, max value increases automatically if value > maxValue
+            limitMin: false, // If true, the min value of the gauge will be fixed
+            colorStart: '#E0E0E0', // Colors
+            colorStop: '#E0E0E0', // just experiment with them
+            strokeColor: '#E0E0E0', // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true, // High resolution support
+
+        };
+        var targetWA = document.getElementById("WheelAngle"); // your canvas element
+        var gaugeWA = new Gauge(targetWA).setOptions(optsWA); // create sexy gauge!
+        gaugeWA.maxValue = 0.30; // set max gauge value
+        gaugeWA.setMinValue(-0.30); // Prefer setter over gauge.minValue = 0
+        gaugeWA.animationSpeed = 32; // set animation speed (32 is default value)
+        //gaugeWA.set(0); // set actual value
+
+    </script>
+
+    <script>
+        var opts = {
+            angle: -0.2, // The span of the gauge arc
+            lineWidth: 0.2, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.54, // // Relative to gauge radius
+                strokeWidth: 0.088, // The thickness
+                color: '#000000' // Fill color
+            },
+            limitMax: false, // If false, max value increases automatically if value > maxValue
+            limitMin: false, // If true, the min value of the gauge will be fixed
+            colorStart: '#0000FF', // Colors
+            colorStop: '#FF0000', // just experiment with them
+            strokeColor: '#E0E0E0', // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true, // High resolution support
+
+        };
+        var target = document.getElementById("Speed"); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.maxValue = 350; // set max gauge value
+        gauge.setMinValue(0); // Prefer setter over gauge.minValue = 0
+        gauge.animationSpeed = 32; // set animation speed (32 is default value)
+        gauge.set(0); // set actual value
+
+    </script>
+
+    <!--Begin Firebase Fetch-->
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use-->
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-database.js"></script>
+    <script id="MainScript">
+        //Insert your auth data here
+        var firebaseConfig = {
+            apiKey: "",
+            authDomain: "",
+            databaseURL: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        var rootRef = firebase.database().ref();
+        var urlRefWA = rootRef.child("frontwheelangle");
+        var urlRefSP = rootRef.child("speed");
+
+        urlRefSP.on("value", function(snapshot) {
+            snapshot.forEach(function(child) {
+                var childvalue = child.val();
+                document.getElementById("SP").innerHTML = 'Speed of ' + childvalue + ' KM/H';
+                if (childvalue > 1) {
+                    gauge.set(childvalue);
+                }
+
+            });
+        });
+
+        urlRefWA.on("value", function(snapshot) {
+            snapshot.forEach(function(child) {
+                document.getElementById("WA").innerHTML = 'Front Wheel Angle of ' + Math.round(child.val()*100*100)/100 + ' Radial Degrees';
+                gaugeWA.set(child.val());
+            });
+        });
+
+    </script>
+</body>
+
+</html>

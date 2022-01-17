@@ -1,6 +1,7 @@
 import ctypes
 
-
+#Define UDP packet structure and the variables
+#Data provided by Codemaster
 class Header(ctypes.LittleEndianStructure):
     _pack_ = 1
     _fields_ = [
@@ -15,7 +16,6 @@ class Header(ctypes.LittleEndianStructure):
         ('m_playerCarIndex', ctypes.c_uint8),            # Index of player's car in the array
         ('m_secondaryPlayerCarIndex', ctypes.c_uint8)   #Index of secondary player's car in the array (splitscreen)
     ]
-
 
 class CarMotionData(ctypes.LittleEndianStructure):
     _pack_ = 1
@@ -260,9 +260,9 @@ class PacketCarTelemetryData(ctypes.LittleEndianStructure):
     _pack_ = 1
     _fields_ = [
         ('m_header', Header),                               # Header
-        ('m_carTelemetryData', CarTelemetryData * 22),
+        ('m_carTelemetryData', CarTelemetryData),           # * 22
         ('m_buttonStatus', ctypes.c_uint32),                # Bit flags specifying which buttons are being pressed currently - see appendices
-        ('m_mfdPanelIndex', ctypes.c_uint8),                # Index of MFD panel open - 255 = MFD closed Single player, race – 0 = Car setup, 1 = Pits 2 = Damage, 3 =  Engine, 4 =     
+        ('m_mfdPanelIndex', ctypes.c_uint8),                
                                                             # Temperatures May vary depending on game mode
         ('m_mfdPanelIndexSecondaryPlayer', ctypes.c_uint8), # See above
         ('m_suggestedGear', ctypes.c_int8)                  # Suggested gear for the player (1-8) 0 if no gear suggested

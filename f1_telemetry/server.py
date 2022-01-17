@@ -1,10 +1,11 @@
 import socket
 from f1_telemetry.f1_2019_struct import *
 
-UDP_IP = "192.168.92.132"
+#Enter your SERVER IP address here
+UDP_IP = "SERVER_IP_ADDR"
 UDP_PORT = 20777
 
-
+#Listen on UDP Port for incoming packets
 def get_telemetry():
     sock = socket.socket(socket.AF_INET,
                          socket.SOCK_DGRAM)
@@ -15,7 +16,9 @@ def get_telemetry():
         m_header = Header.from_buffer_copy(data[0:24])
         mad = 0
         player = 0
+        #Check packetID to see what type of packet it is
         if int(m_header.m_packetId) == 0:
+            #Copy the correct data from buffer
             packet = PacketMotionData.from_buffer_copy(data[0:1464])
             theader = int(m_header.m_packetId)
 
